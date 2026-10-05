@@ -1,0 +1,22 @@
+// build.gradle (Raiz do projeto)
+
+buildscript {
+    ext.kotlin_version = "1.9.10"
+
+    repositories {
+        google()  // Repositório necessário para o Android
+        mavenCentral()  // Repositório Maven Central para o Kotlin e outras dependências
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:8.2.1"  // Plugin do Android, ajuste conforme necessário
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"  // Plugin do Kotlin
+    }
+}
+
+plugins {
+    // Não aplicar plugins do Android no projeto raiz
+    id("org.jetbrains.kotlin.jvm") version "1.9.10" apply false
+    id("com.android.application") version "8.2.0" apply false
+    id("com.android.library") version "8.2.0" apply false
+}

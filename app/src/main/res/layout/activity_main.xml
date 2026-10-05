@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/surface_soft"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="18dp">
+
+        <TextView
+            android:id="@+id/txtTitulo"
+            style="@style/TextAppearance.Financeiro.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnEtapaCaixa"
+                style="@style/Widget.Financeiro.Step"
+                android:text="Caixa" />
+
+            <Button
+                android:id="@+id/btnEtapaIfood"
+                style="@style/Widget.Financeiro.Step"
+                android:text="iFood" />
+
+            <Button
+                android:id="@+id/btnEtapaContabilidade"
+                style="@style/Widget.Financeiro.Step"
+                android:text="Final" />
+
+            <Button
+                android:id="@+id/btnEtapaRevisao"
+                style="@style/Widget.Financeiro.Step"
+                android:text="PDF" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/paginaCaixa"
+            style="@style/WidgetFinanceiroPanel">
+
+            <TextView
+                style="@style/TextAppearance.Financeiro.Section"
+                android:text="Contagem de caixa" />
+
+            <RadioGroup
+                android:id="@+id/grupoTipoCaixa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioAbertura"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Abertura" />
+
+                <RadioButton
+                    android:id="@+id/radioFechamento"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Fechamento" />
+            </RadioGroup>
+
+            <LinearLayout
+                android:id="@+id/containerCaixa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <TextView
+                style="@style/TextAppearance.Financeiro.Total"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total em caixa" />
+
+            <TextView
+                android:id="@+id/txtTotalCaixa"
+                style="@style/TextAppearance.Financeiro.BigNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/paginaIfood"
+            style="@style/WidgetFinanceiroPanel">
+
+            <TextView
+                style="@style/TextAppearance.Financeiro.Section"
+                android:text="Anotacao de iFood" />
+
+            <Spinner
+                android:id="@+id/spinnerIfood"
+                android:layout_width="match_parent"
+                android:layout_height="48dp" />
+
+            <EditText
+                android:id="@+id/inputDescontoIfood"
+                style="@style/Widget.Financeiro.Input"
+                android:hint="Desconto aplicado"
+                android:inputType="numberDecimal" />
+
+            <Button
+                android:id="@+id/btnAdicionarIfood"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Adicionar pedido" />
+
+            <LinearLayout
+                android:id="@+id/containerIfood"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical" />
+
+            <TextView
+                style="@style/TextAppearance.Financeiro.Total"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total online" />
+
+            <TextView
+                android:id="@+id/txtTotalIfood"
+                style="@style/TextAppearance.Financeiro.BigNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/paginaContabilidade"
+            style="@style/WidgetFinanceiroPanel">
+
+            <TextView
+                style="@style/TextAppearance.Financeiro.Section"
+                android:text="Contabilidade final" />
+
+            <EditText
+                android:id="@+id/inputDebito"
+                style="@style/Widget.Financeiro.Input"
+                android:hint="Debito"
+                android:inputType="numberDecimal" />
+
+            <EditText
+                android:id="@+id/inputCredito"
+                style="@style/Widget.Financeiro.Input"
+                android:hint="Credito"
+                android:inputType="numberDecimal" />
+
+            <EditText
+                android:id="@+id/inputPix"
+                style="@style/Widget.Financeiro.Input"
+                android:hint="Pix"
+                android:inputType="numberDecimal" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/paginaRevisao"
+            style="@style/WidgetFinanceiroPanel">
+
+            <TextView
+                style="@style/TextAppearance.Financeiro.Section"
+                android:text="Resumo para PDF" />
+
+            <TextView
+                android:id="@+id/txtResumoDebito"
+                style="@style/TextAppearance.Financeiro.Body" />
+
+            <TextView
+                android:id="@+id/txtResumoCredito"
+                style="@style/TextAppearance.Financeiro.Body" />
+
+            <TextView
+                android:id="@+id/txtResumoPix"
+                style="@style/TextAppearance.Financeiro.Body" />
+
+            <TextView
+                android:id="@+id/txtResumoOnline"
+                style="@style/TextAppearance.Financeiro.Body" />
+
+            <TextView
+                android:id="@+id/txtResumoCaixa"
+                style="@style/TextAppearance.Financeiro.Body" />
+
+            <TextView
+                android:id="@+id/txtResumoTotal"
+                style="@style/TextAppearance.Financeiro.BigNumber" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnAnterior"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Voltar" />
+
+            <Button
+                android:id="@+id/btnProxima"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="Proximo" />
+
+            <Button
+                android:id="@+id/btnGerarPdf"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="Gerar PDF" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnLimpar"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Limpar lancamento" />
+    </LinearLayout>
+</ScrollView>
