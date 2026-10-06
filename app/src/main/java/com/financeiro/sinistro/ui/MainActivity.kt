@@ -125,8 +125,8 @@ class MainActivity : AppCompatActivity() {
         binding.txtTotalIfood.text = resumo.totalIfoodCentavos.formatarMoeda()
         binding.txtResumoDebito.text = "Debito: ${resumo.contabilidade.debitoCentavos.formatarMoeda()}"
         binding.txtResumoCredito.text = "Credito: ${resumo.contabilidade.creditoCentavos.formatarMoeda()}"
-        binding.txtResumoPix.text = "Pix: ${resumo.contabilidade.pixCentavos.formatarMoeda()}"
         binding.txtResumoOnline.text = "Online: ${resumo.totalIfoodCentavos.formatarMoeda()}"
+        binding.txtResumoPix.text = "Pix: ${resumo.contabilidade.pixCentavos.formatarMoeda()}"
         binding.txtResumoCaixa.text = "Caixa: ${resumo.caixa.totalCentavos.formatarMoeda()}"
         binding.txtResumoTotal.text = "Total: ${resumo.totalMovimentadoCentavos.formatarMoeda()}"
     }

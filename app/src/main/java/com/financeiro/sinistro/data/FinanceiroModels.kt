@@ -73,15 +73,28 @@ val denominacoesPadrao = listOf(
     DenominacaoDinheiro("R$ 2,00", 200),
     DenominacaoDinheiro("R$ 1,00", 100),
     DenominacaoDinheiro("R$ 0,50", 50),
-    DenominacaoDinheiro("R$ 0,25", 25)
+    DenominacaoDinheiro("R$ 0,25", 25),
+    DenominacaoDinheiro("R$ 0,10", 10),
+    DenominacaoDinheiro("R$ 0,05", 5)
 )
 
 val itensIfoodPadrao = listOf(
-    ItemIfoodPredefinido("ACAI300", "Acai 300 ml", 1_500),
-    ItemIfoodPredefinido("ACAI500", "Acai 500 ml", 2_200),
-    ItemIfoodPredefinido("CASQ", "Casquinha", 700),
-    ItemIfoodPredefinido("SUNDAE", "Sundae", 1_200),
-    ItemIfoodPredefinido("BEBIDA", "Bebida", 600)
+    ItemIfoodPredefinido("ACAI360", "Acai 360 ml", 2_099),
+    ItemIfoodPredefinido("ACAI480", "Acai 480 ml", 2_799),
+    ItemIfoodPredefinido("ACAI780", "Acai 780 ml", 3_699),
+    ItemIfoodPredefinido("COOKIE1", "Cookie 17,99", 1_799),
+    ItemIfoodPredefinido("COOKIE2", "Cookie 18,99", 1_899),
+    ItemIfoodPredefinido("BEBIDA350", "Bebida 350 ml", 700),
+    ItemIfoodPredefinido("BEBIDAZ350", "Bebida Zero 350 ml", 600),
+    ItemIfoodPredefinido("BEBIDA220", "Bebida 220 ml", 600),
+    ItemIfoodPredefinido("AGUACG", "Água com Gás 510 ml", 650),
+    ItemIfoodPredefinido("AGUASG", "Água sem Gás 510 ml", 600),
+    ItemIfoodPredefinido("FONDUESPM", "Fondue - Só Pra Mim", 2_599),
+    ItemIfoodPredefinido("FONDUEAD", "Fondue à Dois", 4_799),
+    ItemIfoodPredefinido("FONDUEF", "Fondue Família", 9_299),
+    ItemIfoodPredefinido("CHOCO", "Chocolate Quente 240 ml", 2_099),
+    ItemIfoodPredefinido("COPO", "Copo Nawiki 550 ml", 700)
+    
 )
 
 private val moedaFormat = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
