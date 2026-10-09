@@ -76,15 +76,23 @@ class PdfHelper(private val context: Context) {
         if (resumo.ifood.isEmpty()) {
             y = linha(canvas, "Nenhum pedido informado", "-", y, textPaint, linePaint)
         } else {
-            resumo.ifood.forEach {
-                garantirEspaco(36f)
-                val descricao = "${it.codigo} - ${it.descricao}"
-                val detalhe = "Bruto ${it.valorOriginalCentavos.formatarMoeda()} | Desc. ${it.descontoCentavos.formatarMoeda()}"
-                canvas.drawText(descricao, margin, y, textPaint)
-                canvas.drawText(it.valorFinalCentavos.formatarMoeda(), contentRight - textPaint.measureText(it.valorFinalCentavos.formatarMoeda()), y, textPaint)
-                canvas.drawText(detalhe, margin, y + 14f, smallPaint)
-                canvas.drawLine(margin, y + 22f, contentRight, y + 22f, linePaint)
-                y += 34f
+            resumo.ifood.forEachIndexed { index, pedido ->
+                garantirEspaco(48f + pedido.itens.size * 14f)
+                val final = pedido.valorFinalCentavos.formatarMoeda()
+                canvas.drawText("Pedido ${index + 1}", margin, y, textPaint)
+                canvas.drawText(final, contentRight - textPaint.measureText(final), y, textPaint)
+                y += 14f
+                pedido.itens.forEach { item ->
+                    canvas.drawText("${item.quantidade} x ${item.descricao}", margin + 8f, y, smallPaint)
+                    val totalItem = item.totalCentavos.formatarMoeda()
+                    canvas.drawText(totalItem, contentRight - smallPaint.measureText(totalItem), y, smallPaint)
+                    y += 14f
+                }
+                val detalhe = "Bruto ${pedido.valorOriginalCentavos.formatarMoeda()} | " +
+                    "Acresc. ${pedido.acrescimoCentavos.formatarMoeda()} | Desc. ${pedido.descontoCentavos.formatarMoeda()}"
+                canvas.drawText(detalhe, margin + 8f, y, smallPaint)
+                canvas.drawLine(margin, y + 8f, contentRight, y + 8f, linePaint)
+                y += 22f
             }
         }
         y = linhaTotal(canvas, "Total online iFood", resumo.totalIfoodCentavos.formatarMoeda(), y, textPaint)

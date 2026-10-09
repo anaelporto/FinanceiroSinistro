@@ -1,11 +1,13 @@
 package com.financeiro.sinistro.ui
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.financeiro.sinistro.data.ContabilidadeFinal
 import com.financeiro.sinistro.data.FinanceiroRepository
 import com.financeiro.sinistro.data.ItemIfoodPredefinido
+import com.financeiro.sinistro.data.ItemPedidoIfood
 import com.financeiro.sinistro.data.LancamentoIfood
 import com.financeiro.sinistro.data.ResumoFinanceiro
 import com.financeiro.sinistro.data.TipoCaixa
@@ -22,15 +24,39 @@ class FinanceiroViewModel(private val repository: FinanceiroRepository) : ViewMo
         repository.atualizarQuantidadeCaixa(index, quantidadeTexto.toIntOrNull() ?: 0)
     }
 
-    fun adicionarIfood(item: ItemIfoodPredefinido, descontoTexto: String) {
+    private val _itensPedido = MutableLiveData<List<ItemPedidoIfood>>(emptyList())
+    val itensPedido: LiveData<List<ItemPedidoIfood>> = _itensPedido
+
+    fun adicionarItemAoPedido(item: ItemIfoodPredefinido, quantidadeTexto: String) {
+        val quantidade = (quantidadeTexto.trim().toIntOrNull() ?: 1).coerceAtLeast(1)
+        val atuais = _itensPedido.value.orEmpty()
+        val existente = atuais.indexOfFirst { it.codigo == item.codigo }
+        _itensPedido.value = if (existente >= 0) {
+            atuais.mapIndexed { i, atual ->
+                if (i == existente) atual.copy(quantidade = atual.quantidade + quantidade) else atual
+            }
+        } else {
+            atuais + ItemPedidoIfood(item.codigo, item.descricao, item.valorCentavos, quantidade)
+        }
+    }
+
+    fun removerItemDoPedido(index: Int) {
+        _itensPedido.value = _itensPedido.value.orEmpty().filterIndexed { i, _ -> i != index }
+    }
+
+    /** Fecha o pedido em montagem e o envia ao resumo. Retorna false se não houver itens. */
+    fun finalizarPedidoIfood(descontoTexto: String, acrescimoTexto: String): Boolean {
+        val itens = _itensPedido.value.orEmpty()
+        if (itens.isEmpty()) return false
         repository.adicionarIfood(
             LancamentoIfood(
-                codigo = item.codigo,
-                descricao = item.descricao,
-                valorOriginalCentavos = item.valorCentavos,
-                descontoCentavos = descontoTexto.toCentavos()
+                itens = itens,
+                descontoCentavos = descontoTexto.toCentavos(),
+                acrescimoCentavos = acrescimoTexto.toCentavos()
             )
         )
+        _itensPedido.value = emptyList()
+        return true
     }
 
     fun removerIfood(index: Int) = repository.removerIfood(index)
@@ -45,7 +71,10 @@ class FinanceiroViewModel(private val repository: FinanceiroRepository) : ViewMo
         )
     }
 
-    fun limparDia() = repository.limparDia()
+    fun limparDia() {
+        _itensPedido.value = emptyList()
+        repository.limparDia()
+    }
 
     private fun String.toCentavos(): Long {
         val normalizado = trim()

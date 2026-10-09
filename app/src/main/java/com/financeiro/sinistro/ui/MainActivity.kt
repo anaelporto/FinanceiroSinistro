@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import com.financeiro.sinistro.FinanceiroApplication
 import com.financeiro.sinistro.R
+import com.financeiro.sinistro.data.ItemPedidoIfood
 import com.financeiro.sinistro.data.ResumoFinanceiro
 import com.financeiro.sinistro.data.TipoCaixa
 import com.financeiro.sinistro.data.formatarMoeda
@@ -73,11 +74,24 @@ class MainActivity : AppCompatActivity() {
             viewModel.itensIfood.map { "${it.codigo} - ${it.descricao} (${it.valorCentavos.formatarMoeda()})" }
         )
         binding.spinnerIfood.adapter = ifoodAdapter
-        binding.btnAdicionarIfood.setOnClickListener {
+        binding.btnAdicionarItemIfood.setOnClickListener {
             val item = viewModel.itensIfood[binding.spinnerIfood.selectedItemPosition]
-            viewModel.adicionarIfood(item, binding.inputDescontoIfood.text.toString())
-            binding.inputDescontoIfood.text?.clear()
+            viewModel.adicionarItemAoPedido(item, binding.inputQuantidadeIfood.text.toString())
+            binding.inputQuantidadeIfood.text?.clear()
         }
+        binding.btnAdicionarIfood.setOnClickListener {
+            val adicionado = viewModel.finalizarPedidoIfood(
+                descontoTexto = binding.inputDescontoIfood.text.toString(),
+                acrescimoTexto = binding.inputAcrescimoIfood.text.toString()
+            )
+            if (adicionado) {
+                binding.inputDescontoIfood.text?.clear()
+                binding.inputAcrescimoIfood.text?.clear()
+            } else {
+                Toast.makeText(this, "Adicione ao menos um item ao pedido", Toast.LENGTH_SHORT).show()
+            }
+        }
+        viewModel.itensPedido.observe(this) { renderizarItensPedido(it) }
     }
 
     private fun configurarContabilidade() {
@@ -143,11 +157,28 @@ class MainActivity : AppCompatActivity() {
         }
         resumo.ifood.forEachIndexed { index, lancamento ->
             val row = layoutInflater.inflate(R.layout.item_ifood, binding.containerIfood, false)
-            row.findViewById<TextView>(R.id.txtDescricaoIfood).text = "${lancamento.codigo} - ${lancamento.descricao}"
+            row.findViewById<TextView>(R.id.txtDescricaoIfood).text = "Pedido ${index + 1}: ${lancamento.resumoItens}"
             row.findViewById<TextView>(R.id.txtValoresIfood).text =
-                "Bruto ${lancamento.valorOriginalCentavos.formatarMoeda()} | Desc. ${lancamento.descontoCentavos.formatarMoeda()} | Final ${lancamento.valorFinalCentavos.formatarMoeda()}"
+                "Bruto ${lancamento.valorOriginalCentavos.formatarMoeda()} | Acrésc. ${lancamento.acrescimoCentavos.formatarMoeda()} | " +
+                    "Desc. ${lancamento.descontoCentavos.formatarMoeda()} | Final ${lancamento.valorFinalCentavos.formatarMoeda()}"
             row.findViewById<Button>(R.id.btnRemoverIfood).setOnClickListener { viewModel.removerIfood(index) }
             binding.containerIfood.addView(row)
         }
+    }
+
+    private fun renderizarItensPedido(itens: List<ItemPedidoIfood>) {
+        binding.containerItensPedido.removeAllViews()
+        itens.forEachIndexed { index, item ->
+            val row = layoutInflater.inflate(R.layout.item_item_pedido, binding.containerItensPedido, false)
+            row.findViewById<TextView>(R.id.txtItemPedido).text =
+                "${item.quantidade}x ${item.descricao} - ${item.totalCentavos.formatarMoeda()}"
+            row.findViewById<Button>(R.id.btnRemoverItemPedido).setOnClickListener {
+                viewModel.removerItemDoPedido(index)
+            }
+            binding.containerItensPedido.addView(row)
+        }
+        val subtotal = itens.sumOf { it.totalCentavos }
+        binding.txtSubtotalPedido.text =
+            if (itens.isEmpty()) "Nenhum item adicionado ao pedido" else "Subtotal dos itens: ${subtotal.formatarMoeda()}"
     }
 }

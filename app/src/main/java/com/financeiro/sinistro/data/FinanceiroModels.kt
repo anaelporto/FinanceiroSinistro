@@ -35,13 +35,25 @@ data class ItemIfoodPredefinido(
     val valorCentavos: Long
 )
 
-data class LancamentoIfood(
+data class ItemPedidoIfood(
     val codigo: String,
     val descricao: String,
-    val valorOriginalCentavos: Long,
-    val descontoCentavos: Long = 0L
+    val valorUnitarioCentavos: Long,
+    val quantidade: Int = 1
 ) {
-    val valorFinalCentavos: Long get() = (valorOriginalCentavos - descontoCentavos).coerceAtLeast(0L)
+    val totalCentavos: Long get() = valorUnitarioCentavos * quantidade
+}
+
+data class LancamentoIfood(
+    val itens: List<ItemPedidoIfood>,
+    val descontoCentavos: Long = 0L,
+    val acrescimoCentavos: Long = 0L
+) {
+    val valorOriginalCentavos: Long get() = itens.sumOf { it.totalCentavos }
+    val valorFinalCentavos: Long
+        get() = (valorOriginalCentavos - descontoCentavos + acrescimoCentavos).coerceAtLeast(0L)
+    val resumoItens: String
+        get() = itens.joinToString(" + ") { "${it.quantidade}x ${it.descricao}" }
 }
 
 data class ContabilidadeFinal(
